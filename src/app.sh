@@ -15,14 +15,23 @@ QuiteApp() {
 handleMenue() {
     while true; do
         local char="$(getch)"
+        case "$cScreen" in
+        "0")
+            case $char in
 
-        case $char in
+            "up") AppScreen "$char" ;;
+            "down") AppScreen "$char" ;;
+            "?" | "h") HelpScreen ;;
+            "q") QuiteApp "$char" ;;
+            *) AppScreen $char ;;
 
-        "up") AppScreen "$char" ;;
-        "down") AppScreen "$char" ;;
-        "q") QuiteApp "$char" ;;
-        *) AppScreen $char ;;
-
+            esac
+            ;;
+        "2")
+            case "$char" in
+            *) AppScreen "$char" ;;
+            esac
+            ;;
         esac
     done
 }

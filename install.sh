@@ -1,5 +1,13 @@
 #!/bin/bash
 source lib/utils.sh
+if command -v sqlite3 >/dev/null 2>&1; then
+    $(echo "")
+else
+    echo "installing dependencies"
+    sudo apt install -y sqlite3
+    # return 1
+fi
+
 ######################################## GET THE COMMAND NAME #####
 if [ "$1" ]; then
     commandName="$1"

@@ -85,19 +85,21 @@ str_repeat() {
 }
 
 # 12. Pad Start (JS: `str.padStart(targetLength, padString)`)
-str_padStart() {
-    local str="$1"
-    local target_length="$2"
-    local pad_string="${3:- }"
-    printf "%${target_length}s" "$str" | sed "s/ /$pad_string/g"
+str_padStart() { # str, max_len, delimiter
+    [ "$3" != "" ] && delimiter=$3 || delimiter=" "
+    local len="$(str_len "$1")"
+    local target_length="$(($2 - len))"
+    local result="$(str_repeat "$delimiter" $target_length)$1"
+    echo "$result"
 }
 
 # 13. Pad End (JS: `str.padEnd(targetLength, padString)`)
-str_padEnd() {
-    local str="$1"
-    local target_length="$2"
-    local pad_string="${3:- }"
-    printf "%-${target_length}s" "$str" | sed "s/ /$pad_string/g"
+str_padEnd() { # str, max_len, delimiter
+    [ "$3" != "" ] && delimiter=$3 || delimiter=" "
+    local len="$(str_len "$1")"
+    local target_length="$(($2 - len))"
+    local result="$1$(str_repeat "$delimiter" $target_length)"
+    echo "$result"
 }
 
 # 14. Reverse String (Custom Function)

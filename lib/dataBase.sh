@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # Initialize Root variable if not set
-# if [ -z "$Root" ]; then
-#     Root="."
-# fi
+if [ -z "$Root" ]; then
+    Root="."
+fi
 
 # Set DB path
-DB="$Root/src/DB/tasks.db"
+DB_File="$Root/src/DB/tasks.db"
+declare -A DB_Last_Result
 
 # Initialize the database
 DB_init() {
-    if ! sqlite3 "$DB" "create table if not exists tasks (
+    if ! sqlite3 "$DB_File" "create table if not exists tasks (
         id integer primary key autoincrement,
         title text not null,
         date text,
@@ -23,8 +24,18 @@ DB_init() {
 
 # Execute a query on the DB
 DB_query() {
-    results=$(sqlite3 "$DB" "$@") # Use command substitution correctly
+    results=$(sqlite3 "$DB_File" "$@") # Use command substitution correctly
     # Convert the result into a Bash array
     IFS=$'\n' read -r -d '' -a result_array <<<"$results"
-    echo "${result_array[@]}"
+    local i=0
+    DB_Last_Result=()
+
+    for row in "${result_array[@]}"; do
+        DB_Last_Result[$i]="$row"
+        i="$((i + 1))"
+    done
+    # unset IFS
+    # DB_Last_Result=("${result_array[@]}")
+
+    # echo "${result_array[@]}"
 }

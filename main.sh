@@ -1,4 +1,7 @@
 #!/bin/bash
+#check password
+$(sudo echo "")
+
 # Initialize Root variable if not set
 if [ -z "$Root" ]; then
     Root="."
@@ -30,27 +33,31 @@ shopt -s nocasematch # start case insensitive mode
 
 case "$1" in
 #--------------------------------------------------------------- Add New Task
-"add" | "Create" | "new" | "+")
-    [ $(Add $2 $3) -eq 1 ] && echo "MaShaAllah!!! Success." || Add_newDate $2 $3
+"add" | "create" | "new" | "+")
+    [ $(Add "$2" "$3") -eq 1 ] && echo "MaShaAllah!!! Success." || Add_newDate $2 $3
     ;;
 
 #--------------------------------------------------------------- Delete Task
-"rm" | "del" | "remove" | "delete" | "-") source $Root/src/del.sh ;;
+"rm" | "del" | "remove" | "delete" | "-") echo "you want to remove somthing" ;;
 
 #--------------------------------------------------------------- Mark Task as completed or incomplete
-"mark" | "set") source $Root/src/mark.sh ;;
+"done" | "complete" | ">") echo "you want to mark something as done " ;;
+"!done" | "!complete" | "<") echo "you want to mark something as not done" ;;
 
 #--------------------------------------------------------------- See Tasks
-"li" | "list" | "get" | "view" | "show" | "fetch") source $Root/src/get.sh ;;
+"li" | "list" | "get" | "fetch" | "for") List $2 $3 ;;
 
 #--------------------------------------------------------------- Update Task
-"update" | "edit") source $Root/src/update.sh ;;
+"update" | "change" | "up" | "=" | "edit") echo "you want to update" ;;
 
 #--------------------------------------------------------------- Search Tasks
-"search" | "find") source $Root/src/find.sh ;;
+"s" | "search" | "find" | ".") echo "you want to find" ;;
 
 #--------------------------------------------------------------- show available commands
-"help" | "h") source $Root/src/help.sh ;;
+"help" | "h" | "?")
+    HelpScreen
+    char="$(getch)"
+    ;;
 
 #--------------------------------------------------------------- Show the Application
 *) source $Root/src/app.sh ;;
